@@ -1,5 +1,7 @@
-npm create vite@latest dashboard -- --template react-ts
-cd dashboard
+#!/usr/bin/env zsh
+
+npm create vite@latest $1 -- --template react-ts
+cd $1
 
 npm install
 npm install tailwindcss @tailwindcss/vite
