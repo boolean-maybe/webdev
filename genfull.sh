@@ -82,14 +82,71 @@ EOF
 # Navigate back to project root
 cd ..
 
-# Create empty backend directory
+# Create backend directory and setup Express server
 mkdir -p backend
+cd backend
+
+# Create package.json
+cat > package.json <<'EOF'
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Minimal Node.js backend to serve frontend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^5.0.1"
+  }
+}
+EOF
+
+# Create server.js
+cat > server.js <<'EOF'
+import express from 'express';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const app = express();
+const PORT = process.env.PORT || 8081;
+
+// Serve static files from the frontend dist directory
+const frontendDistPath = join(__dirname, '../frontend/dist');
+app.use(express.static(frontendDistPath));
+
+// Handle client-side routing - serve index.html for all non-static routes
+app.use((req, res) => {
+  res.sendFile(join(frontendDistPath, 'index.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
+EOF
+
+# Install backend dependencies
+npm install
+
+# Navigate back to project root
+cd ..
 
 echo ""
 echo "✅ Frontend created in ./frontend/"
+echo "✅ Backend created in ./backend/"
 echo "📁 Project structure:"
 echo "   $1/"
-echo "   ├── frontend/  (your React app)"
-echo "   └── backend/   (empty, ready for your backend)"
+echo "   ├── frontend/  (React + Vite + Tailwind + shadcn/ui)"
+echo "   └── backend/   (Express server to serve frontend)"
 echo ""
 echo "To run frontend: cd frontend && npm run dev"
+echo "To run backend: cd backend && npm run dev"
+echo ""
+echo "💡 Backend serves the built frontend from frontend/dist"
+echo "   Build frontend first: cd frontend && npm run build"
+echo "   Then run backend: cd backend && npm start"
