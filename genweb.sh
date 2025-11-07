@@ -1,6 +1,12 @@
 #!/usr/bin/env zsh
 
-npm create vite@latest $1 -- --template react-ts
+if [ -z "$1" ]; then
+  echo "Error: Project name is required"
+  echo "Usage: $0 <project-name>"
+  exit 1
+fi
+
+echo "No" | npm create vite@latest $1 -- --template react-ts
 cd $1
 
 npm install
