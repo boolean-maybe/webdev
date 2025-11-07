@@ -1,11 +1,17 @@
 #!/usr/bin/env zsh
 
+if [ -z "$1" ]; then
+  echo "Error: Project name is required"
+  echo "Usage: $0 <project-name>"
+  exit 1
+fi
+
 # Create project root directory
 mkdir -p $1
 cd $1
 
 # Create frontend in subdirectory
-npm create vite@latest frontend -- --template react-ts
+echo "No" | npm create vite@latest frontend -- --template react-ts
 cd frontend
 
 npm install
@@ -56,8 +62,8 @@ EOF
 
 npm install react-router-dom
 
-npx shadcn@latest init
-npx shadcn@latest add button
+npx shadcn@latest init -d -y
+npx shadcn@latest add button -y -o
 
 cat > src/App.tsx << 'EOF'
 import { Button } from "@/components/ui/button"
