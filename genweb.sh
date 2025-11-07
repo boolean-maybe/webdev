@@ -51,8 +51,8 @@ EOF
 
 npm install react-router-dom
 
-npx shadcn@latest init
-npx shadcn@latest add button
+npx shadcn@latest init -d -y
+npx shadcn@latest add button -y -o
 
 cat > src/App.tsx << 'EOF'
 import { Button } from "@/components/ui/button"
